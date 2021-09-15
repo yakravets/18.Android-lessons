@@ -20,12 +20,23 @@
             android:onClick="onClickGetData"
             android:text="Get data" />
 
+        <ProgressBar
+            android:id="@+id/pBar"
+            style="?android:attr/progressBarStyleLarge"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/btnShow"
+            android:layout_centerHorizontal="true"
+            android:layout_marginTop="20dp"
+            android:visibility="gone" />
+
         <ListView
             android:id="@+id/list"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:layout_margin="8dp"
-            android:background="@color/orange" />
+            android:background="@color/orange"
+            android:visibility="gone"/>
     </LinearLayout>
 
 </android.support.constraint.ConstraintLayout>

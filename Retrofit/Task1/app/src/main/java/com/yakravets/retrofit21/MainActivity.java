@@ -5,6 +5,7 @@ import android.os.Bundle;
 import android.view.View;
 import android.widget.ArrayAdapter;
 import android.widget.ListView;
+import android.widget.ProgressBar;
 import android.widget.Toast;
 
 import com.yakravets.retrofit21.dto.Product;
@@ -20,6 +21,8 @@ public class MainActivity extends AppCompatActivity {
 
     private ArrayAdapter<String> adapter;
     private ListView listView;
+    private ProgressBar progressBar;
+    private ArrayList<String> products;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -27,9 +30,22 @@ public class MainActivity extends AppCompatActivity {
         setContentView(R.layout.activity_main);
 
         listView = findViewById(R.id.list);
+        progressBar = findViewById(R.id.pBar);
+
+        products = new ArrayList<>();
+        adapter = new ArrayAdapter<>(
+                getApplicationContext(),
+                android.R.layout.simple_list_item_1,
+                products);
     }
 
     public void onClickGetData(View view){
+
+        listView.setVisibility(View.GONE);
+        listView.setAdapter(null);
+
+        progressBar.setVisibility(View.VISIBLE);
+
         ApiService.getInstance()
             .apiProduct()
             .getProducts()
@@ -38,26 +54,22 @@ public class MainActivity extends AppCompatActivity {
                         @Override
                         public void onResponse(Call<ArrayList<Product>> call, Response<ArrayList<Product>> response) {
 
-                            final ArrayList<String> products = new ArrayList<>();
-
-                            listView.setAdapter(null);
-                            adapter = new ArrayAdapter<String>(
-                                    getApplicationContext(),
-                                    android.R.layout.simple_list_item_1,
-                                    products);
                             listView.setAdapter(adapter);
 
                             for (Product p : response.body()) {
                                 products.add(p.getName() + " " + p.getPrice());
                             }
+
+                            listView.setVisibility(View.VISIBLE);
+                            progressBar.setVisibility(View.GONE);
                         }
 
                         @Override
                         public void onFailure(Call<ArrayList<Product>> call, Throwable t) {
                             Toast.makeText(getApplicationContext(), t.getMessage(), Toast.LENGTH_LONG).show();
+                            progressBar.setVisibility(View.GONE);
                         }
                     }
             );
-
     }
 }
