@@ -12,11 +12,13 @@ using Microsoft.EntityFrameworkCore;
 using WebStoreAPI.Data.Entities;
 using WebStoreAPI.Repositories;
 using System;
+using System.Net;
 
 namespace WebStoreAPI
 {
     public class Startup
     {
+        private const int HTTPS_PORT = 443;
         public IConfiguration Configuration { get; }
         private readonly IWebHostEnvironment _env;
 
@@ -37,7 +39,15 @@ namespace WebStoreAPI
             {
                 services.AddDbContext<_AppContext>(options =>
                     options.UseMySQL(Configuration.GetConnectionString("prod")));
+
+                services.AddHttpsRedirection(options =>
+                {
+                    options.RedirectStatusCode = (int)HttpStatusCode.PermanentRedirect;
+                    options.HttpsPort = HTTPS_PORT;
+                });
             }
+            
+            services.BuildServiceProvider().GetService<_AppContext>().Database.Migrate();
 
             services.AddControllers();
             services.Configure<ApiBehaviorOptions>(options =>
@@ -61,17 +71,17 @@ namespace WebStoreAPI
             services.AddAutoMapper(typeof(Startup));
         }
 
-        public void Configure(IApplicationBuilder app) //, IWebHostEnvironment env)
+        public void Configure(IApplicationBuilder app)
         {
             if (_env.IsDevelopment())
             {
-                app.UseDeveloperExceptionPage();
-                app.UseSwagger();
-                app.UseSwaggerUI(
-                    c => c.SwaggerEndpoint(
-                        "/swagger/v1/swagger.json", "Android v1"));
+                app.UseDeveloperExceptionPage();                
             }
-
+            
+            app.UseSwagger();
+            app.UseSwaggerUI(
+                c => c.SwaggerEndpoint(
+                    "/swagger/v1/swagger.json", "Android v1"));
             app.UseRouting();
 
             app.UseAuthorization();
