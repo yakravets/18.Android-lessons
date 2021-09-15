@@ -43,6 +43,7 @@ public class MainActivity extends AppCompatActivity {
 
         listView.setVisibility(View.GONE);
         listView.setAdapter(null);
+        products.clear();
 
         progressBar.setVisibility(View.VISIBLE);
 
