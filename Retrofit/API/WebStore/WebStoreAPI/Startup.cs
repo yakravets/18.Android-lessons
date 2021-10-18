@@ -33,12 +33,12 @@ namespace WebStoreAPI
             if (_env.IsDevelopment())
             {
                 services.AddDbContext<_AppContext>(options =>
-                    options.UseMySQL(Configuration.GetConnectionString("dev")));
+                    options.UseSqlServer(Configuration.GetConnectionString("dev")));
             }
             else
             {
                 services.AddDbContext<_AppContext>(options =>
-                    options.UseMySQL(Configuration.GetConnectionString("prod")));
+                    options.UseSqlServer(Configuration.GetConnectionString("prod")));
 
                 services.AddHttpsRedirection(options =>
                 {
@@ -46,8 +46,6 @@ namespace WebStoreAPI
                     options.HttpsPort = HTTPS_PORT;
                 });
             }
-            
-            services.BuildServiceProvider().GetService<_AppContext>().Database.Migrate();
 
             services.AddControllers();
             services.Configure<ApiBehaviorOptions>(options =>
@@ -75,14 +73,19 @@ namespace WebStoreAPI
         {
             if (_env.IsDevelopment())
             {
-                app.UseDeveloperExceptionPage();                
+                app.UseDeveloperExceptionPage();
             }
-            
+            else
+            {
+                app.UseDeveloperExceptionPage();
+                app.UseHttpsRedirection();
+            }
+
+            app.UseRouting();            
             app.UseSwagger();
             app.UseSwaggerUI(
                 c => c.SwaggerEndpoint(
-                    "/swagger/v1/swagger.json", "Android v1"));
-            app.UseRouting();
+                    "/swagger/v1/swagger.json", "Android v1"));            
 
             app.UseAuthorization();
 

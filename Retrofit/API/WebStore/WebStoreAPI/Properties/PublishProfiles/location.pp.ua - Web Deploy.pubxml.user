@@ -10,7 +10,12 @@ by editing this MSBuild file. In order to learn more about this please visit htt
   </PropertyGroup>
   <ItemGroup>
     <DestinationConnectionStrings Include="prod">
-      <Value>server=scp.realhost.com.ua%3bdatabase=location%3buser=rootuser%3bpassword=1jQ5bacz</Value>
+      <Value>Server=scp.realhost.com.ua%3bDatabase=location_db%3bUid=location%3bPwd=1jQ5bacz1jQ5bacz%3b</Value>
     </DestinationConnectionStrings>
+  </ItemGroup>
+  <ItemGroup>
+    <EFMigrations Include="WebStoreAPI.Data._AppContext">
+      <Value>Server=scp.realhost.com.ua%3bDatabase=location_db%3bUid=location%3bPwd=1jQ5bacz1jQ5bacz%3b</Value>
+    </EFMigrations>
   </ItemGroup>
 </Project>
