@@ -1,0 +1,8 @@
+<resources>
+    <string name="app_name">Android Store</string>
+    <string name="email">Електронна пошта</string>
+    <string name="phone">Телефон</string>
+    <string name="price">Ціна</string>
+    <string name="name">Назва</string>
+    <string name="password">Пароль</string>
+</resources>
